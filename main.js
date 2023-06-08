@@ -56,7 +56,7 @@ function customFilterAndSearch(
     (filter) => filter.column.field === columnField
   )?.value;
 
-  if (columFilterValue) {
+  if (FILTER_CONDITION && columFilterValue) {
     // FLTER SEARCH
 
     const termExistsInAnyCell = lookupColumnFields.some(termExistsOnRow);
