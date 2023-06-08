@@ -7,7 +7,8 @@ function customFilterAndSearch(
   lookupColumnFields = [], // array of strings; all the (necessary) fields that should be included for searching based on `searchTerm`, example: ["name", "surname", "birth"]
   FILTER_CONDITION // the condition for Filter to return `true` as in accepted row for display
 ) {
-  console.log(value, rowData, columnField);
+  
+  if (rowData !== null && typeof rowData === "object" ) throw "rowData needs to be an object";
 
   if (lookupColumnFields.length === 0)
     lookupColumnFields = [...Object.keys(rowData)];
@@ -17,7 +18,9 @@ function customFilterAndSearch(
   const termExistsOnRow = (field) => {
     let searchTermIsFoundInRow = null;
     const fieldValue = rowData[field];
-
+    
+    if (filterValue === null) return false;
+    
     if (typeof fieldValue === "string") {
       const isTrue = fieldValue
         .toLowerCase()
@@ -41,14 +44,11 @@ function customFilterAndSearch(
       }
     }
     if (typeof fieldValue === "object") {
-      const isTrue = Object.keys(fieldValue)
-        .map((field) => fieldValue[field].toLowerCase())
-        .join("")
-        .includes(searchTerm.toLowerCase());
-      if (isTrue) {
-        return (searchTermIsFoundInRow = fieldValue);
-      }
-    }
+      Object.keys(fieldValue)
+        .forEach(termExistsOnRow);
+
+
+}
     return searchTermIsFoundInRow ? true : false;
   };
 
