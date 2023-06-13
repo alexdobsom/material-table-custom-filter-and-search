@@ -1,18 +1,28 @@
 export function customFilterAndSearch(
-  value, // value of the column filter input / table search input, should come from the table's `customFilterAndSearch`
-  rowData, // data of a table row, should come from table's `customFilterAndSearch`
-  columnField, // name of the table column field
-  filtersArray, // all the filters saved from table in a react state -> `useState([])`
-  searchTerm, // value of the table search input saved in a react state -> `useState("")`
-  lookupColumnFields = [], // array of strings; all the (necessary) fields that should be included for searching based on `searchTerm`, example: ["name", "surname", "birth"]
-  FILTER_CONDITION // the condition for Filter to return `true` as in accepted row for display
+  /** value of the column filter input / table search input, should come from the table's `customFilterAndSearch` */
+  value = "",
+  /** data of a table row, should come from table's `customFilterAndSearch` */
+  rowData = {},
+  /** name of the table column field */
+  columnField = "",
+  /** all the filters saved from table in a react state -> `useState([])` */
+  filters = [],
+  /** value of the table search input saved in a react state -> `useState("")` */
+  searchTerm = "",
+  /** array of strings; all the (necessary) fields that should be included for searching based on `searchTerm`, example: ["name", "surname", "birth"] */
+  lookupRowData = [],
+  /** the condition for Filter to return `true` as in accepted row for display */
+  CONDITION
 ) {
   // CLEAN UP:
-  if (rowData === null && typeof rowData !== "object")
-    throw "rowData needs to be an object";
+  if (!value)
+    throw "material-table-custom-filter-and-search says: \nNo value provided as a first function argument!";
 
-  if (lookupColumnFields.length === 0) {
-    lookupColumnFields = [...Object.keys(rowData)];
+  if (rowData === null && typeof rowData !== "object")
+    throw "material-table-custom-filter-and-search says: \nrowData needs to be an object!";
+
+  if (lookupRowData.length === 0) {
+    lookupRowData = [...Object.keys(rowData)];
     searchTerm = searchTerm?.toLowerCase();
   }
 
@@ -40,12 +50,12 @@ export function customFilterAndSearch(
   };
 
   // RULE FOR USING COLUMN INPUT:
-  const columFilterValue = filtersArray?.find(
+  const columFilterValue = filters?.find(
     (filter) => filter.column.field === columnField
   )?.value;
 
   function termExistsInRow() {
-    return lookupColumnFields.some(valueExistsInRowData);
+    return lookupRowData.some(valueExistsInRowData);
   }
 
   // ACTION TO EXECUTE
@@ -55,11 +65,10 @@ export function customFilterAndSearch(
     //   "color: white; font-weight: 700; background: green",
     //   value
     // );
-    const conditionForFilteringisTrue =
-      termExistsInRow() && Boolean(FILTER_CONDITION);
+    const conditionForFilteringisTrue = termExistsInRow() && Boolean(CONDITION);
     return conditionForFilteringisTrue ? true : false;
   } else if (columFilterValue) {
-    const conditionForFilteringisTrue = Boolean(FILTER_CONDITION);
+    const conditionForFilteringisTrue = Boolean(CONDITION);
     return conditionForFilteringisTrue ? true : false;
   } else if (searchTerm) {
     // console.log(
