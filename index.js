@@ -12,7 +12,9 @@ export function customFilterAndSearch(
   /** array of strings; all the (necessary) fields that should be included for searching based on `searchTerm`, example: ["name", "surname", "birth"] */
   lookupRowData = [],
   /** the condition for Filter to return `true` as in accepted row for display */
-  CONDITION
+  CONDITION,
+  /** wheater to enable console log for debug */
+  debug = false
 ) {
   // CLEAN UP:
   if (!value)
@@ -25,7 +27,7 @@ export function customFilterAndSearch(
     lookupRowData = [...Object.keys(rowData)];
     searchTerm = searchTerm?.toLowerCase();
   }
-
+  debug & console.table(arguments);
   // EXISTANCE OF THE TERM IN ROWDATA:
   const valueExistsInRowData = (field) => {
     const fieldValue = rowData[field];
