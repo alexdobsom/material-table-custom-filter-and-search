@@ -36,11 +36,11 @@ export function customFilterAndSearch(
     if (!fieldValue) return false;
 
     if (typeof fieldValue === "string") {
-      const isTrue = fieldValue.toLowerCase().includes(value);
+      const isTrue = fieldValue.toLowerCase().includes(value.toLowerCase());
       return Boolean(isTrue);
     }
     if (typeof fieldValue === "number") {
-      const isTrue = fieldValue.toString().includes(value);
+      const isTrue = fieldValue.toString().includes(value.toLowerCase());
       return Boolean(isTrue);
     }
     if (Array.isArray(fieldValue)) {
